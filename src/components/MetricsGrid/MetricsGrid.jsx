@@ -9,38 +9,20 @@ const MetricCard = ({ icon: Icon, label, value }) => (
   </div>
 );
 
-const MetricsGrid = ({ current }) => {
+const getUvLabel = (uv) => {
+  if (uv === null) return 'н/д';
+  const v = Math.round(uv);
+  return String(v);
+};
+
+const MetricsGrid = ({ current, uvIndex }) => {
   const metrics = [
-    {
-      icon: Droplets,
-      label: 'Влажность',
-      value: `${current.main.humidity}%`,
-    },
-    {
-      icon: Wind,
-      label: 'Ветер',
-      value: formatWind(current.wind.speed, current.wind.deg),
-    },
-    {
-      icon: Gauge,
-      label: 'Давление',
-      value: `${current.main.pressure} гПа`,
-    },
-    {
-      icon: Eye,
-      label: 'Видимость',
-      value: `${Math.round((current.visibility || 0) / 1000)} км`,
-    },
-    {
-      icon: Sun,
-      label: 'UV-индекс',
-      value: 'н/д',
-    },
-    {
-      icon: Cloud,
-      label: 'Облачность',
-      value: `${current.clouds.all}%`,
-    },
+    { icon: Droplets, label: 'Влажность',  value: `${current.main.humidity}%` },
+    { icon: Wind,     label: 'Ветер',       value: formatWind(current.wind.speed, current.wind.deg) },
+    { icon: Gauge,    label: 'Давление',    value: `${Math.round(current.main.pressure * 0.750064)} мм рт. ст.` },
+    { icon: Eye,      label: 'Видимость',   value: `${Math.round((current.visibility || 0) / 1000)} км` },
+    { icon: Sun,      label: 'UV-индекс',   value: getUvLabel(uvIndex) },
+    { icon: Cloud,    label: 'Облачность',  value: `${current.clouds.all}%` },
   ];
 
   return (

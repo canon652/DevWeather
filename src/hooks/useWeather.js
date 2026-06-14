@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchCurrentWeather, fetchForecast } from '../api/weatherApi';
+import { fetchCurrentWeather, fetchForecast, fetchUvIndex, fetchSeaTemp } from '../api/weatherApi';
 import { getCached, setCached } from '../utils/cache';
 
 export const useWeather = (lat, lon, units = 'metric') => {
@@ -20,9 +20,11 @@ export const useWeather = (lat, lon, units = 'metric') => {
     Promise.all([
       fetchCurrentWeather(lat, lon, units),
       fetchForecast(lat, lon, units),
+      fetchUvIndex(lat, lon),
+      fetchSeaTemp(lat, lon),
     ])
-      .then(([current, forecast]) => {
-        const result = { current, forecast };
+      .then(([current, forecast, uvIndex, seaTemp]) => {
+        const result = { current, forecast, uvIndex, seaTemp };
         setData(result);
         setCached(cacheKey, result);
       })

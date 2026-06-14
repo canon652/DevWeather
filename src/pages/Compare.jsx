@@ -30,7 +30,8 @@ const CityChip = ({ city, index, onRemove, units, onDataReady }) => {
   );
 };
 
-const CompareTable = ({ cities, units }) => (
+// citiesData items have shape: { lat, lon, name, weatherData: { current, forecast } }
+const CompareTable = ({ citiesData, units }) => (
   <div className="glass-card mt-4 p-6 overflow-x-auto">
     <h3 className="text-white/70 text-sm uppercase tracking-widest mb-4">
       Сравнительная таблица
@@ -39,24 +40,25 @@ const CompareTable = ({ cities, units }) => (
       <thead>
         <tr className="text-white/50 border-b border-white/10">
           <th className="text-left py-2 pr-4">Показатель</th>
-          {cities.map((c) => (
+          {citiesData.map((c) => (
             <th key={c.lat} className="text-center py-2 px-2">{c.name}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         {[
-          { label: 'Температура', getValue: (d) => formatTemp(d.current.main.temp, units) },
-          { label: 'Влажность', getValue: (d) => `${d.current.main.humidity}%` },
-          { label: 'Ветер', getValue: (d) => formatWind(d.current.wind.speed, d.current.wind.deg) },
-          { label: 'Давление', getValue: (d) => `${d.current.main.pressure} гПа` },
-          { label: 'Погода', getValue: (d) => d.current.weather[0].description },
+          { label: 'Температура',   fn: (c) => formatTemp(c.weatherData.current.main.temp, units) },
+          { label: 'Ощущается как', fn: (c) => formatTemp(c.weatherData.current.main.feels_like, units) },
+          { label: 'Влажность',     fn: (c) => `${c.weatherData.current.main.humidity}%` },
+          { label: 'Ветер',         fn: (c) => formatWind(c.weatherData.current.wind.speed, c.weatherData.current.wind.deg) },
+          { label: 'Давление',      fn: (c) => `${Math.round(c.weatherData.current.main.pressure * 0.750064)} мм рт. ст.` },
+          { label: 'Погода',        fn: (c) => c.weatherData.current.weather[0].description },
         ].map((row) => (
           <tr key={row.label} className="border-b border-white/5">
             <td className="py-3 pr-4 text-white/60">{row.label}</td>
-            {cities.map((c) => (
+            {citiesData.map((c) => (
               <td key={c.lat} className="py-3 px-2 text-center capitalize">
-                {row.getValue(c)}
+                {row.fn(c)}
               </td>
             ))}
           </tr>
@@ -115,13 +117,13 @@ const Compare = () => {
         )}
 
         {citiesData.length >= 2 && <CompareChart cities={citiesData} />}
-        {citiesData.length > 0 && <CompareTable cities={citiesData} units={units} />}
+        {citiesData.length > 0 && <CompareTable citiesData={citiesData} units={units} />}
 
         {cities.length === 0 && (
           <div className="flex flex-col items-center justify-center text-white/60 py-24 gap-4">
             <BarChart2 className="w-20 h-20 text-white/30" />
             <p className="text-xl">Добавьте до 3 городов для сравнения</p>
-            <p className="text-sm text-white/40">Поиск доступен выше — введите название города</p>
+            <p className="text-sm text-white/40">Введите название города в поле выше</p>
           </div>
         )}
       </div>
