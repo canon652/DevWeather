@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { MapPin, X, Search } from 'lucide-react';
-import { searchCity } from '../../api/geocodingApi';
+import { searchCity, getCityName, getCityLabel } from '../../api/geocodingApi';
 import { useGeolocation } from '../../hooks/useGeolocation';
 
 const SearchBar = ({ onSelect }) => {
@@ -32,8 +32,8 @@ const SearchBar = ({ onSelect }) => {
   }, []);
 
   const handleSelect = (item) => {
-    const name = item.display_name.split(',')[0];
-    onSelect({ lat: parseFloat(item.lat), lon: parseFloat(item.lon), name });
+    const name = getCityName(item);
+    onSelect({ lat: item.lat, lon: item.lon, name, country: item.country });
     setQuery(name);
     setIsOpen(false);
     setResults([]);
@@ -69,11 +69,11 @@ const SearchBar = ({ onSelect }) => {
           <ul className="absolute top-full mt-2 w-full bg-white/90 backdrop-blur rounded-xl shadow-lg z-50 overflow-hidden">
             {results.map((item) => (
               <li
-                key={item.place_id}
+                key={`${item.lat}-${item.lon}`}
                 onClick={() => handleSelect(item)}
                 className="px-4 py-3 hover:bg-blue-50 cursor-pointer text-gray-800 text-sm border-b last:border-0"
               >
-                {item.display_name}
+                {getCityLabel(item)}
               </li>
             ))}
           </ul>

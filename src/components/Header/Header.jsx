@@ -29,35 +29,35 @@ const Header = () => {
   return (
     <header className={`backdrop-blur-md ${headerBg} border-b border-white/15 sticky top-0 z-40 transition-colors duration-1000`}>
       <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-white font-bold text-xl">
+        <div className="flex items-center gap-2 text-white font-bold text-xl flex-shrink-0">
           <Cloud className="w-6 h-6 text-blue-300" />
-          DevWeather
+          <span className="hidden sm:inline">DevWeather</span>
         </div>
 
-        <nav className="flex items-center gap-1">
+        <nav className="flex items-center gap-0.5 sm:gap-1">
           {navItems.map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
               to={to}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-colors ${
+              className={`flex items-center gap-1.5 px-2 sm:px-3 py-2 rounded-xl text-sm transition-colors ${
                 location.pathname === to
                   ? 'bg-white/25 text-white font-medium'
                   : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
             >
               <Icon className="w-4 h-4" />
-              <span className="hidden sm:inline">{label}</span>
+              <span className="hidden md:inline">{label}</span>
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
           <button
             onClick={() => setUnits(units === 'metric' ? 'imperial' : 'metric')}
             aria-label="Переключить единицы температуры"
-            className="flex items-center gap-1 px-3 py-2 rounded-xl backdrop-blur-md bg-white/20 border border-white/30 text-white hover:bg-white/30 transition-colors text-sm"
+            className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-xl backdrop-blur-md bg-white/20 border border-white/30 text-white hover:bg-white/30 transition-colors text-sm"
           >
-            <Thermometer className="w-4 h-4" />
+            <Thermometer className="w-4 h-4 hidden sm:block" />
             {units === 'metric' ? '°C' : '°F'}
           </button>
           <ThemeToggle />

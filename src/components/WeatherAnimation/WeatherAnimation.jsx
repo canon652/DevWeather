@@ -1,7 +1,7 @@
 const WRAPPER = {
-  position: 'fixed',
+  position: 'absolute',
   inset: 0,
-  zIndex: 2,
+  zIndex: 0,
   pointerEvents: 'none',
   overflow: 'hidden',
 };

@@ -14,6 +14,7 @@ import { useSettings } from '../context/SettingsContext';
 import { getBackground } from '../utils/weatherBackground';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { formatTemp } from '../utils/formatTemp';
+import WeatherAnimation from '../components/WeatherAnimation/WeatherAnimation';
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center text-white/60 py-24 gap-4">
@@ -68,9 +69,15 @@ const Dashboard = () => {
     ? groupByDay(data.forecast.list).find((d) => d.date === selectedDate)?.items
     : null;
 
+  const weatherCode = data?.current.weather[0].id ?? null;
+  const isDay = data
+    ? (Date.now() / 1000 > data.current.sys.sunrise && Date.now() / 1000 < data.current.sys.sunset)
+    : true;
+
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${bgClass} transition-all duration-1000`}>
-      <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className={`min-h-screen relative bg-gradient-to-br ${bgClass} transition-all duration-1000`}>
+      <WeatherAnimation weatherCode={weatherCode} isDay={isDay} />
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
         <SearchBar onSelect={handleSelect} />
 
         {!coords && !loading && <EmptyState />}

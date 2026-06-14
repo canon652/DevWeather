@@ -28,7 +28,7 @@ const WeatherCard = ({ current }) => {
   };
 
   return (
-    <div className="glass-card mt-6 p-8 text-white text-center relative animate-fade-in">
+    <div className="glass-card mt-6 p-5 sm:p-8 text-white text-center relative animate-fade-in">
       <button
         onClick={toggleSave}
         aria-label={isSaved ? 'Удалить из избранного' : 'Добавить в избранное'}
@@ -47,7 +47,7 @@ const WeatherCard = ({ current }) => {
           alt={current.weather[0].description}
           className="w-24"
         />
-        <span className="text-8xl font-bold">
+        <span className="text-6xl sm:text-8xl font-bold">
           {formatTemp(current.main.temp, units)}
         </span>
       </div>
