@@ -30,3 +30,51 @@
     padding: 0;
   }
 }
+
+/* Weather background animations */
+@keyframes cloudDriftLTR {
+  0% { transform: translateX(-450px); }
+  100% { transform: translateX(110vw); }
+}
+
+@keyframes cloudDriftRTL {
+  0% { transform: translateX(calc(100vw + 450px)); }
+  100% { transform: translateX(-450px); }
+}
+
+@keyframes rainDrop {
+  0% { transform: translateY(-60px) translateX(0); opacity: 0; }
+  8% { opacity: 0.65; }
+  88% { opacity: 0.65; }
+  100% { transform: translateY(100vh) translateX(35px); opacity: 0; }
+}
+
+@keyframes snowDrift {
+  0% { transform: translateY(-30px) translateX(0); opacity: 0; }
+  10% { opacity: 0.85; }
+  50% { transform: translateY(45vh) translateX(18px); }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(105vh) translateX(-8px); opacity: 0; }
+}
+
+@keyframes lightningFlash {
+  0%, 86%, 100% { opacity: 0; }
+  87%, 89% { opacity: 0.2; }
+  88% { opacity: 0; }
+}
+
+@keyframes fogDrift {
+  0% { transform: translateX(-10%); opacity: 0.05; }
+  50% { transform: translateX(10%); opacity: 0.12; }
+  100% { transform: translateX(-10%); opacity: 0.05; }
+}
+
+@keyframes sunRay {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.3); }
+}

@@ -22,11 +22,11 @@ const SavedCityCard = ({ city, units, onRemove }) => {
   const iconUrl = `https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`;
 
   return (
-    <div className="glass-card p-5 text-white relative group">
+    <div className="glass-card p-5 text-white relative">
       <button
         onClick={() => onRemove(city.lat)}
         aria-label={`Удалить ${city.name} из избранного`}
-        className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-white/50 hover:text-red-400"
+        className="absolute top-3 right-3 p-1 rounded-lg text-white/40 hover:text-red-400 hover:bg-white/10 transition-colors"
       >
         <X className="w-4 h-4" />
       </button>

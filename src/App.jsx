@@ -3,11 +3,15 @@ import Dashboard from './pages/Dashboard';
 import Compare from './pages/Compare';
 import Saved from './pages/Saved';
 import Header from './components/Header/Header';
+import WeatherAnimation from './components/WeatherAnimation/WeatherAnimation';
+import { useSettings } from './context/SettingsContext';
 
-function App() {
+function AppInner() {
+  const { weatherCode, isDay } = useSettings();
   return (
     <BrowserRouter>
-      <div className="min-h-screen font-sans transition-colors duration-300">
+      <WeatherAnimation weatherCode={weatherCode} isDay={isDay} />
+      <div className="relative min-h-screen font-sans transition-colors duration-300" style={{ zIndex: 3 }}>
         <Header />
         <main>
           <Routes>
@@ -19,6 +23,10 @@ function App() {
       </div>
     </BrowserRouter>
   );
+}
+
+function App() {
+  return <AppInner />;
 }
 
 export default App;

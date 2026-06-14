@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CloudSun, Waves } from 'lucide-react';
 import SearchBar from '../components/SearchBar/SearchBar';
 import WeatherCard from '../components/WeatherCard/WeatherCard';
@@ -43,8 +43,16 @@ const Dashboard = () => {
   const [lastCity, setLastCity] = useLocalStorage('lastCity', null);
   const [coords, setCoords] = useState(lastCity);
   const [selectedDate, setSelectedDate] = useState(null);
-  const { units } = useSettings();
+  const { units, setWeatherInfo } = useSettings();
   const { data, loading, error } = useWeather(coords?.lat, coords?.lon, units);
+
+  useEffect(() => {
+    if (data) {
+      const now = Date.now() / 1000;
+      const day = now > data.current.sys.sunrise && now < data.current.sys.sunset;
+      setWeatherInfo(data.current.weather[0].id, day);
+    }
+  }, [data]);
 
   const bgClass = data
     ? getBackground(data.current.weather[0].id, data.current.sys)

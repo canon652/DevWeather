@@ -77,27 +77,25 @@ const DayDetail = ({ date, items }) => {
       </ResponsiveContainer>
 
       {/* Stats summary */}
-      <div className="grid grid-cols-3 gap-3 mt-4">
-        {items.slice(0, 1).map((item) => (
-          <>
-            <div key="hum" className="bg-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
-              <Droplets className="w-4 h-4 text-white/50" />
-              <span className="text-xs text-white/50">Влажность</span>
-              <span className="font-semibold">{item.main.humidity}%</span>
-            </div>
-            <div key="wind" className="bg-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
-              <Wind className="w-4 h-4 text-white/50" />
-              <span className="text-xs text-white/50">Ветер</span>
-              <span className="font-semibold text-sm">{formatWind(item.wind.speed, item.wind.deg)}</span>
-            </div>
-            <div key="pres" className="bg-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
-              <Gauge className="w-4 h-4 text-white/50" />
-              <span className="text-xs text-white/50">Давление</span>
-              <span className="font-semibold text-sm">{item.main.pressure} гПа</span>
-            </div>
-          </>
-        ))}
-      </div>
+      {items[0] && (
+        <div className="grid grid-cols-3 gap-3 mt-4">
+          <div className="bg-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
+            <Droplets className="w-4 h-4 text-white/50" />
+            <span className="text-xs text-white/50">Влажность</span>
+            <span className="font-semibold">{items[0].main.humidity}%</span>
+          </div>
+          <div className="bg-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
+            <Wind className="w-4 h-4 text-white/50" />
+            <span className="text-xs text-white/50">Ветер</span>
+            <span className="font-semibold text-sm">{formatWind(items[0].wind.speed, items[0].wind.deg)}</span>
+          </div>
+          <div className="bg-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
+            <Gauge className="w-4 h-4 text-white/50" />
+            <span className="text-xs text-white/50">Давление</span>
+            <span className="font-semibold text-sm">{Math.round(items[0].main.pressure * 0.750064)} мм рт. ст.</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
