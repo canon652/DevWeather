@@ -8,6 +8,7 @@ import HourlyChart from '../components/HourlyChart/HourlyChart';
 import WeekForecast, { groupByDay } from '../components/WeekForecast/WeekForecast';
 import DayDetail from '../components/DayDetail/DayDetail';
 import MoonPhase from '../components/MoonPhase/MoonPhase';
+import AirQuality from '../components/AirQuality/AirQuality';
 import { DashboardSkeleton } from '../components/Skeleton/Skeleton';
 import { useWeather } from '../hooks/useWeather';
 import { useSettings } from '../context/SettingsContext';
@@ -16,11 +17,16 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { formatTemp } from '../utils/formatTemp';
 import WeatherAnimation from '../components/WeatherAnimation/WeatherAnimation';
 
-const EmptyState = () => (
+const EmptyState = ({ onGeoRequest }) => (
   <div className="flex flex-col items-center justify-center text-white/60 py-24 gap-4">
     <CloudSun className="w-20 h-20 text-white/30" />
     <p className="text-xl">Введите город, чтобы узнать погоду</p>
-    <p className="text-sm text-white/40">Или нажмите на иконку геолокации</p>
+    <button
+      onClick={onGeoRequest}
+      className="mt-2 px-5 py-2.5 rounded-2xl backdrop-blur-md bg-white/20 border border-white/30 text-white text-sm hover:bg-white/30 transition-colors"
+    >
+      📍 Определить моё местоположение
+    </button>
   </div>
 );
 
@@ -47,6 +53,20 @@ const Dashboard = () => {
   const { units, setWeatherInfo } = useSettings();
   const { data, loading, error } = useWeather(coords?.lat, coords?.lon, units);
 
+  // Auto-request geolocation on first visit (no saved city)
+  useEffect(() => {
+    if (!lastCity && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const city = { lat: pos.coords.latitude, lon: pos.coords.longitude, name: 'Моё местоположение' };
+          setCoords(city);
+          setLastCity(city);
+        },
+        () => {} // silently ignore if denied
+      );
+    }
+  }, []);
+
   useEffect(() => {
     if (data) {
       const now = Date.now() / 1000;
@@ -65,6 +85,17 @@ const Dashboard = () => {
     setSelectedDate(null);
   };
 
+  const handleGeoRequest = () => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const city = { lat: pos.coords.latitude, lon: pos.coords.longitude, name: 'Моё местоположение' };
+        handleSelect(city);
+      },
+      () => {}
+    );
+  };
+
   const selectedDayItems = selectedDate && data
     ? groupByDay(data.forecast.list).find((d) => d.date === selectedDate)?.items
     : null;
@@ -80,7 +111,7 @@ const Dashboard = () => {
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
         <SearchBar onSelect={handleSelect} />
 
-        {!coords && !loading && <EmptyState />}
+        {!coords && !loading && <EmptyState onGeoRequest={handleGeoRequest} />}
         {loading && <DashboardSkeleton />}
         {error && (
           <div className="mt-8 glass-card p-6 text-center">
@@ -92,6 +123,7 @@ const Dashboard = () => {
           <>
             <WeatherCard current={data.current} cityName={coords?.name} />
             <MetricsGrid current={data.current} uvIndex={data.uvIndex} />
+            <AirQuality airQuality={data.airQuality} />
             <SeaTempCard seaTemp={data.seaTemp} units={units} />
             <SunriseSunset sys={data.current.sys} />
             <MoonPhase />

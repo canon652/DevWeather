@@ -17,6 +17,7 @@ export const groupByDay = (list) => {
     fullDayName: FULL_DAYS[new Date(date).getDay()],
     minTemp: Math.round(Math.min(...items.map((i) => i.main.temp_min))),
     maxTemp: Math.round(Math.max(...items.map((i) => i.main.temp_max))),
+    maxPop: Math.round(Math.max(...items.map((i) => (i.pop || 0))) * 100),
     icon: items[4]?.weather[0].icon || items[0].weather[0].icon,
     desc: items[4]?.weather[0].description || items[0].weather[0].description,
     items,
@@ -53,6 +54,9 @@ const WeekForecast = ({ forecast, selectedDate, onSelectDate }) => {
               />
               <span className="text-sm font-semibold">{formatTemp(day.maxTemp, units)}</span>
               <span className="text-xs text-white/50">{formatTemp(day.minTemp, units)}</span>
+              {day.maxPop > 10 && (
+                <span className="text-xs text-blue-200">💧{day.maxPop}%</span>
+              )}
             </button>
           );
         })}

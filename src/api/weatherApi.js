@@ -29,6 +29,17 @@ export const fetchUvIndex = async (lat, lon) => {
   } catch { return null; }
 };
 
+export const fetchAirQuality = async (lat, lon) => {
+  try {
+    const res = await fetch(
+      `${BASE}/air_pollution?lat=${lat}&lon=${lon}&appid=${KEY}`
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.list?.[0] ?? null;
+  } catch { return null; }
+};
+
 // Open-Meteo Marine API — возвращает null для inland городов
 export const fetchSeaTemp = async (lat, lon) => {
   try {
