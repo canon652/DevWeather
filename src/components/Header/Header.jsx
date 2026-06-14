@@ -14,7 +14,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="backdrop-blur-md bg-white/10 border-b border-white/20 sticky top-0 z-40">
+    <header className="backdrop-blur-md bg-slate-900/85 border-b border-white/15 sticky top-0 z-40">
       <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2 text-white font-bold text-xl">
           <Cloud className="w-6 h-6 text-blue-300" />

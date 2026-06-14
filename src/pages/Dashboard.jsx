@@ -5,7 +5,8 @@ import WeatherCard from '../components/WeatherCard/WeatherCard';
 import MetricsGrid from '../components/MetricsGrid/MetricsGrid';
 import SunriseSunset from '../components/SunriseSunset/SunriseSunset';
 import HourlyChart from '../components/HourlyChart/HourlyChart';
-import WeekForecast from '../components/WeekForecast/WeekForecast';
+import WeekForecast, { groupByDay } from '../components/WeekForecast/WeekForecast';
+import DayDetail from '../components/DayDetail/DayDetail';
 import { DashboardSkeleton } from '../components/Skeleton/Skeleton';
 import { useWeather } from '../hooks/useWeather';
 import { useSettings } from '../context/SettingsContext';
@@ -23,6 +24,7 @@ const EmptyState = () => (
 const Dashboard = () => {
   const [lastCity, setLastCity] = useLocalStorage('lastCity', null);
   const [coords, setCoords] = useState(lastCity);
+  const [selectedDate, setSelectedDate] = useState(null);
   const { units } = useSettings();
   const { data, loading, error } = useWeather(coords?.lat, coords?.lon, units);
 
@@ -33,7 +35,12 @@ const Dashboard = () => {
   const handleSelect = (city) => {
     setCoords(city);
     setLastCity(city);
+    setSelectedDate(null);
   };
+
+  const selectedDayItems = selectedDate && data
+    ? groupByDay(data.forecast.list).find((d) => d.date === selectedDate)?.items
+    : null;
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${bgClass} transition-all duration-1000`}>
@@ -49,13 +56,20 @@ const Dashboard = () => {
           </div>
         )}
         {data && !loading && (
-          <div className="space-y-0">
+          <>
             <WeatherCard current={data.current} />
             <MetricsGrid current={data.current} />
             <SunriseSunset sys={data.current.sys} />
             <HourlyChart forecast={data.forecast} />
-            <WeekForecast forecast={data.forecast} />
-          </div>
+            <WeekForecast
+              forecast={data.forecast}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+            />
+            {selectedDate && selectedDayItems && (
+              <DayDetail date={selectedDate} items={selectedDayItems} />
+            )}
+          </>
         )}
       </div>
     </div>
