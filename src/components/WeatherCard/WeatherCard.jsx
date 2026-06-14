@@ -19,7 +19,7 @@ const WeatherCard = ({ current, cityName }) => {
         {
           lat: current.coord?.lat,
           lon: current.coord?.lon,
-          name: current.name,
+          name: cityName || current.name,
           country: current.sys.country,
           addedAt: Date.now(),
         },

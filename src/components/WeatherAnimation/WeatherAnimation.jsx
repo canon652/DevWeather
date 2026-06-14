@@ -49,6 +49,8 @@ const STATIC_CLOUDS = [
   { left: '58%',  top: '60%', width: 250, shape: 3, opacity: 0.08, flip: true  },
   { left: '28%',  top: '76%', width: 195, shape: 0, opacity: 0.07, flip: false },
   { left: '-2%',  top: '68%', width: 140, shape: 2, opacity: 0.06, flip: true  },
+  { left: '72%',  top: '6%',  width: 185, shape: 3, opacity: 0.10, flip: false },
+  { left: '68%',  top: '36%', width: 148, shape: 2, opacity: 0.08, flip: true  },
 ];
 
 const StaticClouds = () => (
