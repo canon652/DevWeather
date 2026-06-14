@@ -90,7 +90,7 @@ const Dashboard = () => {
         )}
         {data && !loading && (
           <>
-            <WeatherCard current={data.current} />
+            <WeatherCard current={data.current} cityName={coords?.name} />
             <MetricsGrid current={data.current} uvIndex={data.uvIndex} />
             <SeaTempCard seaTemp={data.seaTemp} units={units} />
             <SunriseSunset sys={data.current.sys} />

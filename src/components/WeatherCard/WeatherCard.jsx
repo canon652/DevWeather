@@ -3,7 +3,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { formatTemp } from '../../utils/formatTemp';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 
-const WeatherCard = ({ current }) => {
+const WeatherCard = ({ current, cityName }) => {
   const { units } = useSettings();
   const [savedCities, setSavedCities] = useLocalStorage('savedCities', []);
   const iconUrl = `https://openweathermap.org/img/wn/${current.weather[0].icon}@4x.png`;
@@ -38,7 +38,7 @@ const WeatherCard = ({ current }) => {
       </button>
 
       <p className="text-lg text-white/70">
-        {current.name}, {current.sys.country}
+        {cityName || current.name}, {current.sys.country}
       </p>
 
       <div className="flex items-center justify-center gap-4 my-4">

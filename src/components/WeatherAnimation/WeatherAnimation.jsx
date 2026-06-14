@@ -6,34 +6,67 @@ const WRAPPER = {
   overflow: 'hidden',
 };
 
-const CloudSVG = ({ size, opacity }) => (
-  <svg viewBox="0 0 200 90" width={size} style={{ opacity }}>
-    <ellipse cx="100" cy="68" rx="88" ry="32" fill="white" />
-    <ellipse cx="65" cy="52" rx="52" ry="38" fill="white" />
-    <ellipse cx="138" cy="56" rx="46" ry="34" fill="white" />
-    <ellipse cx="100" cy="46" rx="36" ry="30" fill="white" />
-  </svg>
-);
+/* Static cloud shapes rendered as SVG ellipse groups */
+const CloudShape = ({ type }) => {
+  if (type === 0) return (
+    <>
+      <ellipse cx="100" cy="70" rx="88" ry="30" fill="white" />
+      <ellipse cx="62" cy="54" rx="50" ry="38" fill="white" />
+      <ellipse cx="135" cy="57" rx="45" ry="33" fill="white" />
+      <ellipse cx="98" cy="45" rx="35" ry="32" fill="white" />
+    </>
+  );
+  if (type === 1) return (
+    <>
+      <ellipse cx="100" cy="72" rx="85" ry="28" fill="white" />
+      <ellipse cx="55" cy="52" rx="48" ry="42" fill="white" />
+      <ellipse cx="108" cy="40" rx="52" ry="46" fill="white" />
+      <ellipse cx="158" cy="58" rx="36" ry="30" fill="white" />
+      <ellipse cx="78" cy="30" rx="30" ry="30" fill="white" />
+    </>
+  );
+  if (type === 2) return (
+    <>
+      <ellipse cx="100" cy="68" rx="94" ry="22" fill="white" />
+      <ellipse cx="58" cy="54" rx="44" ry="28" fill="white" />
+      <ellipse cx="142" cy="50" rx="40" ry="24" fill="white" />
+      <ellipse cx="95" cy="44" rx="28" ry="24" fill="white" />
+    </>
+  );
+  return (
+    <>
+      <ellipse cx="100" cy="65" rx="80" ry="32" fill="white" />
+      <ellipse cx="72" cy="50" rx="52" ry="40" fill="white" />
+      <ellipse cx="132" cy="52" rx="42" ry="35" fill="white" />
+    </>
+  );
+};
 
-const CLOUD_DATA = [
-  { id: 0, size: 260, opacity: 0.12, top: '12%', duration: 28, delay: 0, ltr: true },
-  { id: 1, size: 190, opacity: 0.09, top: '45%', duration: 38, delay: -14, ltr: false },
-  { id: 2, size: 320, opacity: 0.07, top: '68%', duration: 22, delay: -9, ltr: true },
+const STATIC_CLOUDS = [
+  { left: '-6%',  top: '4%',  width: 300, shape: 0, opacity: 0.14, flip: false },
+  { left: '52%',  top: '16%', width: 220, shape: 1, opacity: 0.11, flip: true  },
+  { left: '8%',   top: '44%', width: 175, shape: 2, opacity: 0.09, flip: false },
+  { left: '58%',  top: '60%', width: 250, shape: 3, opacity: 0.08, flip: true  },
+  { left: '28%',  top: '76%', width: 195, shape: 0, opacity: 0.07, flip: false },
+  { left: '-2%',  top: '68%', width: 140, shape: 2, opacity: 0.06, flip: true  },
 ];
 
-const Clouds = () => (
+const StaticClouds = () => (
   <div style={WRAPPER}>
-    {CLOUD_DATA.map((c) => (
+    {STATIC_CLOUDS.map((c, i) => (
       <div
-        key={c.id}
+        key={i}
         style={{
           position: 'absolute',
+          left: c.left,
           top: c.top,
-          animation: `${c.ltr ? 'cloudDriftLTR' : 'cloudDriftRTL'} ${c.duration}s linear infinite`,
-          animationDelay: `${c.delay}s`,
+          opacity: c.opacity,
+          transform: c.flip ? 'scaleX(-1)' : undefined,
         }}
       >
-        <CloudSVG size={c.size} opacity={c.opacity} />
+        <svg viewBox="0 0 200 100" width={c.width}>
+          <CloudShape type={c.shape} />
+        </svg>
       </div>
     ))}
   </div>
@@ -209,7 +242,7 @@ const WeatherAnimation = ({ weatherCode, isDay }) => {
   if (weatherCode >= 600 && weatherCode < 700) return <Snow />;
   if (weatherCode >= 700 && weatherCode < 800) return <Fog />;
   if (weatherCode === 800) return <SunRays />;
-  if (weatherCode > 800) return <Clouds />;
+  if (weatherCode > 800) return <StaticClouds />;
   return null;
 };
 
