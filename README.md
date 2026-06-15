@@ -1,59 +1,95 @@
 # DevWeather 🌤
 
-Умная метеостанция с аналитикой — портфолио-проект.
+Умная метеостанция с аналитикой — портфолио-проект на React + Vite.
+
+**Live demo:** [dev-weather-lilac.vercel.app](https://dev-weather-lilac.vercel.app)
+
+## Скриншоты
+
+<table>
+  <tr>
+    <td><img src="docs/screenshot-main.png" alt="Главная страница" width="100%"/></td>
+    <td><img src="docs/screenshot-charts.png" alt="Графики и прогноз" width="100%"/></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Главная — карточка погоды и метрики</em></td>
+    <td align="center"><em>Почасовой график и прогноз на неделю</em></td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="docs/screenshot-mobile.jpg" alt="Мобильная версия" width="320"/>
+  <br/><em>Адаптивная мобильная версия (PWA)</em>
+</p>
 
 ## Что умеет
 
-- Поиск любого города в мире (Nominatim / OpenStreetMap)
-- Определение местоположения по геолокации браузера
-- Текущая погода: температура, ощущаемая, описание, иконка
-- 6 метрик: влажность, ветер, давление, видимость, облачность
-- Почасовой график температуры на 24 часа (Recharts)
-- Анимированная дуга восхода/заката солнца (SVG)
-- Прогноз на 7 дней
+- Поиск любого города мира с подсказками на русском языке
+- Автоопределение местоположения по геолокации
+- Текущая погода: температура, ощущаемая, иконка, описание
+- 6 метрик: влажность, ветер, давление, видимость, UV-индекс, облачность
+- Качество воздуха (AQI) с разбивкой по PM2.5, PM10, NO₂, O₃
+- Вероятность осадков в прогнозе
+- Почасовой график температуры + осадки (Recharts)
+- Фаза луны и восход/закат солнца
+- Прогноз на 7 дней с детализацией по дням
 - Сравнение погоды до 3 городов одновременно
-- Избранные города с сортировкой
+- Избранные города
 - Переключение °C / °F
 - Светлая / тёмная тема
+- Анимированный фон зависящий от погоды (дождь, снег, молния, облака)
+- PWA — устанавливается на телефон как приложение
 - Кэширование запросов (30 мин, localStorage)
-- Адаптивная вёрстка (mobile-first)
 
 ## Стек
 
-- **React 18** + **Vite**
-- **Tailwind CSS** — glassmorphism UI, динамические фоны
-- **Recharts** — графики температуры
-- **React Router v6** — 3 страницы (Dashboard, Compare, Saved)
-- **OpenWeatherMap API** — погода и прогноз
-- **Nominatim API** — геокодирование (без ключа)
+| Технология | Использование |
+|---|---|
+| **React 19** + **Vite 8** | UI и сборка |
+| **Tailwind CSS v3** | Glassmorphism UI, адаптивность |
+| **Recharts** | Почасовой график (температура + осадки) |
+| **React Router v6** | 3 страницы: Dashboard, Compare, Saved |
+| **OpenWeatherMap API** | Погода, прогноз, AQI, геокодирование |
+| **Open-Meteo API** | UV-индекс, температура воды |
+| **vite-plugin-pwa** | PWA, сервис-воркер, офлайн-кэш |
 
-## Запуск
+## Запуск локально
 
 ```bash
 # 1. Клонировать репозиторий
-git clone https://github.com/canon652/devweather.git
-cd devweather
+git clone https://github.com/canon652/DevWeather.git
+cd DevWeather
 
 # 2. Установить зависимости
 npm install
 
-# 3. Создать .env и вставить API ключ OpenWeatherMap
+# 3. Создать .env с API ключом OpenWeatherMap
 echo "VITE_WEATHER_API_KEY=ваш_ключ" > .env
 
 # 4. Запустить dev-сервер
 npm run dev
 ```
 
-Получить бесплатный API ключ: [openweathermap.org](https://openweathermap.org) → Sign Up → API Keys
+Бесплатный API ключ: [openweathermap.org](https://openweathermap.org) → Sign Up → API Keys
 
-## Структура
+## Структура проекта
 
 ```
 src/
-├── api/          # Запросы к OpenWeatherMap и Nominatim
-├── hooks/        # useWeather, useLocalStorage, useGeolocation
-├── context/      # SettingsContext (тема, единицы)
-├── utils/        # Форматирование, кэш, логика фона
-├── components/   # SearchBar, WeatherCard, HourlyChart, WeekForecast…
-└── pages/        # Dashboard, Compare, Saved
+├── api/             # weatherApi.js, geocodingApi.js
+├── hooks/           # useWeather, useLocalStorage
+├── context/         # SettingsContext (тема, единицы, код погоды)
+├── utils/           # formatTemp, weatherBackground, cache
+├── components/
+│   ├── WeatherCard/     # Карточка с температурой
+│   ├── MetricsGrid/     # 6 метрик
+│   ├── AirQuality/      # Виджет AQI
+│   ├── HourlyChart/     # Recharts график
+│   ├── WeekForecast/    # Прогноз на 7 дней
+│   ├── WeatherAnimation/# Анимации фона
+│   └── ...
+└── pages/
+    ├── Dashboard.jsx    # Главная
+    ├── Compare.jsx      # Сравнение городов
+    └── Saved.jsx        # Избранное
 ```
