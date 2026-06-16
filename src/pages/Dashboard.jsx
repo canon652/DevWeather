@@ -16,6 +16,7 @@ import { getBackground } from '../utils/weatherBackground';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { formatTemp } from '../utils/formatTemp';
 import WeatherAnimation from '../components/WeatherAnimation/WeatherAnimation';
+import HourlyForecast from '../components/HourlyForecast/HourlyForecast';
 
 const EmptyState = ({ onGeoRequest }) => (
   <div className="flex flex-col items-center justify-center text-white/60 py-24 gap-4">
@@ -122,6 +123,7 @@ const Dashboard = () => {
         {data && !loading && (
           <>
             <WeatherCard current={data.current} cityName={coords?.name} />
+            <HourlyForecast forecast={data.forecast} current={data.current} />
             <MetricsGrid current={data.current} uvIndex={data.uvIndex} />
             <AirQuality airQuality={data.airQuality} />
             <SeaTempCard seaTemp={data.seaTemp} units={units} />
