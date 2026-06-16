@@ -52,7 +52,7 @@ const HourlyForecast = ({ forecast, current }) => {
           return (
             <div
               key={i}
-              className={`flex flex-col items-center gap-1 px-3 py-2 rounded-2xl flex-shrink-0 min-w-[64px] transition-colors ${
+              className={`flex flex-col items-center gap-1 px-3 py-3 rounded-2xl flex-1 min-w-[72px] transition-colors ${
                 item.isNow
                   ? 'bg-white/20 border border-white/30'
                   : 'bg-white/8 hover:bg-white/15'
